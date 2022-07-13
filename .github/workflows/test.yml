@@ -1,4 +1,4 @@
-name: deploy-shell
+name: deploy-test-shell
 
 on:
   push:
