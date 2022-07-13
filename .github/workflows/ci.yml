@@ -11,14 +11,11 @@ jobs:
   build:
     name: Build
     timeout-minutes: 15
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     # To use Remote Caching, uncomment the next lines and follow the steps below.
     # env:
     #  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
     #  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
 
     steps:
       - name: Check out code
@@ -37,6 +34,13 @@ jobs:
 
       - name: Build
         run: yarn build
+
+      - name: Set AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
 
       - name: Deploy
         uses: reggionick/s3-deploy@v3
