@@ -37,3 +37,11 @@ jobs:
 
       - name: Build
         run: yarn build
+
+      - name: Deploy
+        uses: reggionick/s3-deploy@v3
+        with:
+          folder: build
+          bucket: turbin-test
+          bucket-region: us-east-1
+          delete-removed: true
