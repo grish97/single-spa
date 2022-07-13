@@ -1,13 +1,16 @@
 name: deploy-shell
+
 on:
   push:
     branches:
       - main
     paths:
       - "apps/shell/**"
+  
 defaults:
   run:
     working-directory: apps/shell
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,14 +36,16 @@ jobs:
         env:
           PRODUCTION_DOMAIN: ${{ secrets.PRODUCTION_DOMAIN }}
 
-      - uses: ItsKarma/aws-cli@v1.70.0
+      - name: Deploy To S3
+        uses: ItsKarma/aws-cli@v1.70.0
         with:
           args: s3 sync apps/shell/build s3://${{ secrets.AWS_S3_BUCKET_NAME }}/shell
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - uses: ItsKarma/aws-cli@v1.70.0
+      - name: Cloudfront
+        uses: ItsKarma/aws-cli@v1.70.0
         with:
           args: cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/shell/index.html"
 
