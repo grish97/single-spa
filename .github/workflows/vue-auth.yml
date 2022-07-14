@@ -1,14 +1,12 @@
-name: deploy-shell
-
+name: deploy-vue-auth
 on:
   push:
     branches:
       - main
-  
+
 defaults:
   run:
-    working-directory: apps/shell
-  
+    working-directory: apps/vue-auth
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -43,17 +41,14 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
-          SOURCE_DIR: "apps/shell/dist"
-          DEST_DIR: "shell"
+          SOURCE_DIR: "apps/vue-auth/dist"
+          DEST_DIR: "vue-auth"
 
       - name: Invalidate Cloudfront
         uses: chetan/invalidate-cloudfront-action@v1.3
-#        with:
-#          args: cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/shell/index.html"
-
         env:
           DISTRIBUTION: ${{ secrets.AWS_DISTRIBUTION_ID }}
-          PATHS: '/shell/*'
+          PATHS: '/vue-auth/*'
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
