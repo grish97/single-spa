@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+    paths: [
+      "apps/react-dashboard/**",
+      ".github/"
+    ]
 
 defaults:
   run:

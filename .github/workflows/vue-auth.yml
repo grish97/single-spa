@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - main
+    paths: [
+      "apps/vue-auth/**",
+      ".github/"
+    ]
 
 defaults:
   run:
