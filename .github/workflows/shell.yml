@@ -6,7 +6,7 @@ on:
       - main
     paths: [
       "apps/shell/**",
-      ".github/"
+      ".github/**"
     ]
   
 defaults:
