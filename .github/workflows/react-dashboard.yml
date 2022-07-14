@@ -47,6 +47,8 @@ jobs:
 
       - name: Invalidate Cloudfront
         uses: chetan/invalidate-cloudfront-action@v1.3
+
+
         env:
           DISTRIBUTION: ${{ secrets.AWS_DISTRIBUTION_ID }}
           PATHS: '/react-dashboard/*'
