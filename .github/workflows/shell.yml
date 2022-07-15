@@ -50,8 +50,6 @@ jobs:
           SOURCE_DIR: "apps/shell/dist"
           DEST_DIR: "shell"
 
-
-
       - name: Invalidate Cloudfront
         uses: chetan/invalidate-cloudfront-action@v1.3
         env:
