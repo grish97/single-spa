@@ -45,10 +45,6 @@ jobs:
         env:
           PRODUCTION_DOMAIN: ${{ secrets.AWS_SHELL_DOMAIN }}
 
-       - name: Log Access key id
-         run:
-           echo ${{ env.AWS_ACCESS_KEY_ID }}
-
       - name: Deploy To S3
         uses: jakejarvis/s3-sync-action@master
         with:
