@@ -15,6 +15,13 @@ defaults:
   
 jobs:
   build:
+    env:
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_NAME }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+      AWS_SHELL_DISTRIBUTION_ID: ${{ secrets.AWS_SHELL_DISTRIBUTION_ID }}
+
     runs-on: ubuntu-latest
 
     steps:
@@ -30,7 +37,6 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn
 
       - name: Build
@@ -43,19 +49,21 @@ jobs:
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --follow-symlinks --delete
+        run:
+          echo ${{ env.AWS_ACCESS_KEY_ID }}
         env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_NAME }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+          AWS_S3_BUCKET: ${{ env.AWS_S3_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ env.AWS_REGION }}
           SOURCE_DIR: "apps/shell/dist"
           DEST_DIR: "shell"
 
       - name: Invalidate Cloudfront
         uses: chetan/invalidate-cloudfront-action@v1.3
         env:
-          DISTRIBUTION: ${{ secrets.AWS_SHELL_DISTRIBUTION_ID }}
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          DISTRIBUTION: ${{ env.AWS_SHELL_DISTRIBUTION_ID }}
+          AWS_REGION: ${{ env.AWS_REGION }}
           PATHS: '/shell/*'
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
