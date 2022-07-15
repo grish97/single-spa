@@ -5,7 +5,7 @@ on:
       - main
     paths: [
       "apps/react-layout/**",
-      ".github/**"
+      ".github/workflows/react-layout.yml"
     ]
 
 defaults:
@@ -29,7 +29,6 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn
 
       - name: Build
@@ -46,7 +45,7 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_NAME }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
           SOURCE_DIR: "apps/react-layout/dist"
           DEST_DIR: "react-layout"
 

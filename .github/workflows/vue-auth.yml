@@ -5,7 +5,7 @@ on:
       - main
     paths: [
       "apps/vue-auth/**",
-      ".github/**"
+      ".github/workflows/vue-auth.yml"
     ]
 
 defaults:
@@ -28,7 +28,6 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn
 
       - name: Build

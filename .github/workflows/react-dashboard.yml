@@ -5,7 +5,7 @@ on:
       - main
     paths: [
       "apps/react-dashboard/**",
-      ".github/**"
+      ".github/workflows/react-dashboard.yml"
     ]
 
 defaults:
@@ -29,7 +29,6 @@ jobs:
           cache: 'yarn'
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn
 
       - name: Build
